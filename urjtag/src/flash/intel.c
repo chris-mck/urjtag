@@ -190,6 +190,24 @@ _intel_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array,
     case 0x8810:
         urj_log (ll, "GE28F256L18B\n");
         break;
+    case 0x8817:
+        urj_log (ll, "28F640P30T\n");
+        break;
+    case 0x8818:
+        urj_log (ll, "28F128P30T\n");
+        break;
+    case 0x8819:
+        urj_log (ll, "28F256P30T\n");
+        break;
+    case 0x881A:
+        urj_log (ll, "28F640P30B\n");
+        break;
+    case 0x881B:
+        urj_log (ll, "28F128P30B\n");
+        break;
+    case 0x881C:
+        urj_log (ll, "28F256P30B\n");
+        break;
     case 0x891F:
         urj_log (ll, "28F256P33\n");
         break;

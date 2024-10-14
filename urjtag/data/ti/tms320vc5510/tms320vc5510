@@ -1,0 +1,551 @@
+signal NC(1)
+signal NC(2)
+signal NC(3)
+signal NC(4)
+signal NC(5)
+signal NC(6)
+signal NC(7)
+signal NC(8)
+signal NC(9)
+signal NC(10)
+signal NC(11)
+signal NC(12)
+signal VSS(1)
+signal VSS(2)
+signal VSS(3)
+signal VSS(4)
+signal VSS(5)
+signal VSS(6)
+signal VSS(7)
+signal VSS(8)
+signal VSS(9)
+signal VSS(10)
+signal VSS(11)
+signal VSS(12)
+signal VSS(13)
+signal VSS(14)
+signal VSS(15)
+signal VSS(16)
+signal DVDD(1)
+signal DVDD(2)
+signal DVDD(3)
+signal DVDD(4)
+signal DVDD(5)
+signal DVDD(6)
+signal DVDD(7)
+signal DVDD(8)
+signal DVDD(9)
+signal DVDD(10)
+signal CVDD(1)
+signal CVDD(2)
+signal CVDD(3)
+signal CVDD(4)
+signal CVDD(5)
+signal CVDD(6)
+signal CVDD(7)
+signal CVDD(8)
+signal CVDD(9)
+signal CVDD(10)
+signal CVDD(11)
+signal CVDD(12)
+signal CVDD(13)
+signal CVDD(14)
+signal CVDD(15)
+signal CVDD(16)
+signal CVDD(17)
+signal CVDD(18)
+signal XF
+signal IO0
+signal IO1
+signal IO2
+signal IO3
+signal IO4
+signal IO5
+signal IO6
+signal IO7
+signal TINOUT1
+signal TINOUT0
+signal CLKMD
+signal CLKOUT
+signal CLKIN
+signal RSVD9
+signal RSVD8
+signal RSVD7
+signal RSVD6
+signal RSVD5
+signal RSVD4
+signal RSVD3
+signal RSVD2
+signal RSVD1
+signal BOOTM3
+signal EMU1
+signal EMU0
+signal TRST
+signal TMS
+signal TDO
+signal TDI
+signal TCK
+signal IACK_NC
+signal NMI
+signal INT0
+signal INT1
+signal INT2
+signal INT3
+signal INT4
+signal INT5
+signal RESET
+signal HINT
+signal RSTMODE
+signal HCNTL0
+signal HMODE
+signal HBE1
+signal HBE0
+signal HRDY
+signal HDS2
+signal HDS1
+signal HRNW
+signal HCS
+signal HD(0)
+signal HD(1)
+signal HD(2)
+signal HD(3)
+signal HD(4)
+signal HD(5)
+signal HD(6)
+signal HD(7)
+signal HD(8)
+signal HD(9)
+signal HD(10)
+signal HD(11)
+signal HD(12)
+signal HD(13)
+signal HD(14)
+signal HD(15)
+signal HA(0)
+signal HA(1)
+signal HA(2)
+signal HA(3)
+signal HA(4)
+signal HA(5)
+signal HA(6)
+signal HA(7)
+signal HA(8)
+signal HA(9)
+signal HA(10)
+signal HA(11)
+signal HA(12)
+signal HA(13)
+signal HA(14)
+signal HA(15)
+signal HA(16)
+signal HA(17)
+signal HA(18)
+signal HA(19)
+signal CLKS2
+signal FSX2
+signal DX2
+signal CLKX2
+signal FSR2
+signal DR2
+signal CLKR2
+signal CLKS1
+signal FSX1
+signal DX1
+signal CLKX1
+signal FSR1
+signal DR1
+signal CLKR1
+signal CLKS0
+signal FSX0
+signal DX0
+signal CLKX0
+signal FSR0
+signal DR0
+signal CLKR0
+signal SDA10
+signal SDWE
+signal SDCAS
+signal SDRAS
+signal SSWE
+signal SSOE
+signal SSADS
+signal ARDY
+signal AWE
+signal AOE
+signal ARE
+signal HOLDA
+signal HOLD
+signal D(0)
+signal D(1)
+signal D(2)
+signal D(3)
+signal D(4)
+signal D(5)
+signal D(6)
+signal D(7)
+signal D(8)
+signal D(9)
+signal D(10)
+signal D(11)
+signal D(12)
+signal D(13)
+signal D(14)
+signal D(15)
+signal D(16)
+signal D(17)
+signal D(18)
+signal D(19)
+signal D(20)
+signal D(21)
+signal D(22)
+signal D(23)
+signal D(24)
+signal D(25)
+signal D(26)
+signal D(27)
+signal D(28)
+signal D(29)
+signal D(30)
+signal D(31)
+signal CLKMEM
+signal BE0
+signal BE1
+signal BE2
+signal BE3
+signal CE0
+signal CE1
+signal CE2
+signal CE3
+signal A(0)
+signal A(1)
+signal A(2)
+signal A(3)
+signal A(4)
+signal A(5)
+signal A(6)
+signal A(7)
+signal A(8)
+signal A(9)
+signal A(10)
+signal A(11)
+signal A(12)
+signal A(13)
+signal A(14)
+signal A(15)
+signal A(16)
+signal A(17)
+signal A(18)
+signal A(19)
+signal A(20)
+signal A(21)
+instruction length 10
+register DIR 32
+register BSR 302
+register BYPASS 1
+instruction SAMPLE/PRELOAD 0000000100 BSR
+instruction IDCODE 0000001100 DIR
+instruction HIGHZ 0000011000 BYPASS
+instruction BYPASS 1111111111 BYPASS
+instruction EXTEST 0000000000 BSR
+bit 0 C 1 *
+bit 1 I ? D(13)
+bit 2 C 1 *
+bit 3 O ? D(13) 2 1 Z
+bit 4 O ? A(10) 0 1 Z
+bit 5 I ? D(11)
+bit 6 C 1 *
+bit 7 O ? D(11) 6 1 Z
+bit 8 I ? D(14)
+bit 9 C 1 *
+bit 10 O ? D(14) 9 1 Z
+bit 11 O ? CE3 0 1 Z
+bit 12 I ? D(12)
+bit 13 C 1 *
+bit 14 O ? D(12) 13 1 Z
+bit 15 I ? D(15)
+bit 16 C 1 *
+bit 17 O ? D(15) 16 1 Z
+bit 18 O ? A(11) 0 1 Z
+bit 19 O ? A(16) 0 1 Z
+bit 20 O ? A(12) 0 1 Z
+bit 21 O ? A(13) 0 1 Z
+bit 22 O ? A(14) 0 1 Z
+bit 23 O ? A(15) 0 1 Z
+bit 24 O ? A(17) 0 1 Z
+bit 25 O ? CE2 0 1 Z
+bit 26 O ? A(18) 0 1 Z
+bit 27 O ? A(19) 0 1 Z
+bit 28 O ? CE1 0 1 Z
+bit 29 O ? A(20) 0 1 Z
+bit 30 O ? A(21) 0 1 Z
+bit 31 O ? CE0 0 1 Z
+bit 32 I ? IO0
+bit 33 O ? IO0 34 1 Z
+bit 34 C 1 *
+bit 35 O ? BE1 0 1 Z
+bit 36 O ? BE0 0 1 Z
+bit 37 I ? IO7
+bit 38 O ? IO7 39 1 Z
+bit 39 C 1 *
+bit 40 O ? BE3 0 1 Z
+bit 41 O ? BE2 0 1 Z
+bit 42 I ? IO6
+bit 43 O ? IO6 44 1 Z
+bit 44 C 1 *
+bit 45 I ? IO1
+bit 46 O ? IO1 47 1 Z
+bit 47 C 1 *
+bit 48 O ? SSOE 0 1 Z
+bit 49 O ? SSWE 0 1 Z
+bit 50 I ? IO5
+bit 51 O ? IO5 52 1 Z
+bit 52 C 1 *
+bit 53 O ? SSADS 0 1 Z
+bit 54 I ? D(19)
+bit 55 C 1 *
+bit 56 O ? D(19) 55 1 Z
+bit 57 I ? D(16)
+bit 58 C 1 *
+bit 59 O ? D(16) 58 1 Z
+bit 60 I ? IO4
+bit 61 O ? IO4 62 1 Z
+bit 62 C 1 *
+bit 63 I ? IO3
+bit 64 O ? IO3 65 1 Z
+bit 65 C 1 *
+bit 66 I ? DR1
+bit 67 I ? CLKS1
+bit 68 I ? D(17)
+bit 69 C 1 *
+bit 70 O ? D(17) 69 1 Z
+bit 71 I ? D(18)
+bit 72 C 1 *
+bit 73 O ? D(18) 72 1 Z
+bit 74 I ? FSR1
+bit 75 O ? FSR1 76 1 Z
+bit 76 C 1 *
+bit 77 I ? CLKR1
+bit 78 O ? CLKR1 79 1 Z
+bit 79 C 1 *
+bit 80 I ? IO2
+bit 81 O ? IO2 82 1 Z
+bit 82 C 1 *
+bit 83 I ? CLKR0
+bit 84 O ? CLKR0 85 1 Z
+bit 85 C 1 *
+bit 86 I ? D(20)
+bit 87 C 1 *
+bit 88 O ? D(20) 87 1 Z
+bit 89 I ? D(21)
+bit 90 C 1 *
+bit 91 O ? D(21) 90 1 Z
+bit 92 I ? D(22)
+bit 93 C 1 *
+bit 94 O ? D(22) 93 1 Z
+bit 95 I ? CLKR2
+bit 96 O ? CLKR2 97 1 Z
+bit 97 C 1 *
+bit 98 I ? FSR0
+bit 99 O ? FSR0 100 1 Z
+bit 100 C 1 *
+bit 101 I ? CLKS0
+bit 102 I ? D(23)
+bit 103 C 1 *
+bit 104 O ? D(23) 103 1 Z
+bit 105 I ? FSR2
+bit 106 O ? FSR2 107 1 Z
+bit 107 C 1 *
+bit 108 I ? DR0
+bit 109 I ? D(24)
+bit 110 C 1 *
+bit 111 O ? D(24) 110 1 Z
+bit 112 I ? DR2
+bit 113 I ? D(25)
+bit 114 C 1 *
+bit 115 O ? D(25) 114 1 Z
+bit 116 I ? CLKX0
+bit 117 O ? CLKX0 118 1 Z
+bit 118 C 1 *
+bit 119 I ? CLKS2
+bit 120 I ? D(26)
+bit 121 C 1 *
+bit 122 O ? D(26) 121 1 Z
+bit 123 I ? D(27)
+bit 124 C 1 *
+bit 125 O ? D(27) 124 1 Z
+bit 126 I ? CLKX2
+bit 127 O ? CLKX2 128 1 Z
+bit 128 C 1 *
+bit 129 I ? FSX0
+bit 130 O ? FSX0 131 1 Z
+bit 131 C 1 *
+bit 132 I ? FSX2
+bit 133 O ? FSX2 134 1 Z
+bit 134 C 1 *
+bit 135 I ? D(29)
+bit 136 C 1 *
+bit 137 O ? D(29) 136 1 Z
+bit 138 I ? D(31)
+bit 139 C 1 *
+bit 140 O ? D(31) 139 1 Z
+bit 141 O ? DX0 142 1 Z
+bit 142 C 1 *
+bit 143 I ? D(30)
+bit 144 C 1 *
+bit 145 O ? D(30) 144 1 Z
+bit 146 I ? D(28)
+bit 147 C 1 *
+bit 148 O ? D(28) 147 1 Z
+bit 149 I ? INT5
+bit 150 O ? CLKMEM 173 1 Z
+bit 151 O ? DX2 152 1 Z
+bit 152 C 1 *
+bit 153 I ? INT4
+bit 154 I ? INT0
+bit 155 I ? NMI
+bit 156 I ? ARDY
+bit 157 O ? HOLDA 173 1 Z
+bit 158 I ? INT2
+bit 159 O ? AWE 0 1 Z
+bit 160 I ? INT1
+bit 161 O ? AOE 0 1 Z
+bit 162 O ? ARE 0 1 Z
+bit 163 I ? INT3
+bit 164 I ? HOLD
+bit 165 I ? CLKX1
+bit 166 O ? CLKX1 167 1 Z
+bit 167 C 1 *
+bit 168 I ? FSX1
+bit 169 O ? FSX1 170 1 Z
+bit 170 C 1 *
+bit 171 O ? DX1 172 1 Z
+bit 172 C 1 *
+bit 173 C 1 *
+bit 174 O ? TINOUT1 176 1 Z
+bit 175 I ? TINOUT1
+bit 176 C 1 *
+bit 177 O ? TINOUT0 179 1 Z
+bit 178 I ? TINOUT0
+bit 179 C 1 *
+bit 180 I ? CLKMD
+bit 181 O ? HINT 173 1 Z
+bit 182 I ? HCNTL0
+bit 183 I ? HMODE
+bit 184 I ? HA(19)
+bit 185 I ? HA(18)
+bit 186 I ? HA(17)
+bit 187 I ? HBE1
+bit 188 I ? HBE0
+bit 189 I ? HA(16)
+bit 190 I ? HA(6)
+bit 191 I ? HA(5)
+bit 192 I ? HA(15)
+bit 193 I ? HA(7)
+bit 194 I ? HA(4)
+bit 195 O ? CLKOUT 173 1 Z
+bit 196 I ? HA(14)
+bit 197 I ? HA(8)
+bit 198 I ? HA(3)
+bit 199 I ? RESET
+bit 200 I ? HA(13)
+bit 201 I ? HA(9)
+bit 202 I ? HA(2)
+bit 203 I ? CLKIN
+bit 204 I ? HA(12)
+bit 205 I ? HDS2
+bit 206 I ? HA(10)
+bit 207 I ? HA(1)
+bit 208 I ? RSTMODE
+bit 209 I ? HA(11)
+bit 210 I ? HA(0)
+bit 211 I ? HDS1
+bit 212 I ? HRNW
+bit 213 I ? HCS
+bit 214 I ? HD(3)
+bit 215 O ? HD(3) 234 1 Z
+bit 216 I ? HD(0)
+bit 217 O ? HD(0) 234 1 Z
+bit 218 I ? HD(10)
+bit 219 O ? HD(10) 233 1 Z
+bit 220 I ? HD(9)
+bit 221 O ? HD(9) 233 1 Z
+bit 222 C 1 *
+bit 223 O ? HRDY 222 1 Z
+bit 224 I ? HD(11)
+bit 225 O ? HD(11) 233 1 Z
+bit 226 I ? HD(8)
+bit 227 O ? HD(8) 233 1 Z
+bit 228 I ? HD(1)
+bit 229 O ? HD(1) 234 1 Z
+bit 230 O ? SDCAS 0 1 Z
+bit 231 I ? HD(12)
+bit 232 O ? HD(12) 233 1 Z
+bit 233 C 1 *
+bit 234 C 1 *
+bit 235 I ? HD(7)
+bit 236 O ? HD(7) 234 1 Z
+bit 237 O ? SDWE 0 1 Z
+bit 238 I ? HD(13)
+bit 239 O ? HD(13) 233 1 Z
+bit 240 I ? HD(6)
+bit 241 O ? HD(6) 234 1 Z
+bit 242 I ? HD(2)
+bit 243 O ? HD(2) 234 1 Z
+bit 244 O ? SDRAS 0 1 Z
+bit 245 I ? HD(14)
+bit 246 O ? HD(14) 233 1 Z
+bit 247 I ? HD(5)
+bit 248 O ? HD(5) 234 1 Z
+bit 249 O ? SDA10 0 1 Z
+bit 250 I ? HD(15)
+bit 251 O ? HD(15) 233 1 Z
+bit 252 I ? HD(4)
+bit 253 O ? HD(4) 234 1 Z
+bit 254 O 1 *
+bit 255 O ? A(1) 0 1 Z
+bit 256 I ? D(0)
+bit 257 C 1 *
+bit 258 O ? D(0) 257 1 Z
+bit 259 O ? A(0) 0 1 Z
+bit 260 I ? D(2)
+bit 261 C 1 *
+bit 262 O ? D(2) 261 1 Z
+bit 263 I ? D(1)
+bit 264 C 1 *
+bit 265 O ? D(1) 264 1 Z
+bit 266 O ? A(3) 0 1 Z
+bit 267 O ? A(2) 0 1 Z
+bit 268 I ? D(4)
+bit 269 C 1 *
+bit 270 O ? D(4) 269 1 Z
+bit 271 O ? A(5) 0 1 Z
+bit 272 I ? D(3)
+bit 273 C 1 *
+bit 274 O ? D(3) 273 1 Z
+bit 275 O ? A(4) 0 1 Z
+bit 276 I ? D(6)
+bit 277 C 1 *
+bit 278 O ? D(6) 277 1 Z
+bit 279 I ? D(8)
+bit 280 C 1 *
+bit 281 O ? D(8) 280 1 Z
+bit 282 O ? A(7) 0 1 Z
+bit 283 I ? D(5)
+bit 284 C 1 *
+bit 285 O ? D(5) 284 1 Z
+bit 286 O ? A(8) 0 1 Z
+bit 287 O ? A(6) 0 1 Z
+bit 288 I ? D(7)
+bit 289 C 1 *
+bit 290 O ? D(7) 289 1 Z
+bit 291 O ? A(9) 0 1 Z
+bit 292 I ? D(10)
+bit 293 C 1 *
+bit 294 O ? D(10) 293 1 Z
+bit 295 I ? D(9)
+bit 296 C 1 *
+bit 297 O ? D(9) 296 1 Z
+bit 298 O ? *
+bit 299 O ? *
+bit 300 I ? BOOTM3
+bit 301 O ? XF 173 1 Z

@@ -34,7 +34,8 @@
  *     28F320J3A (x8/x16)", April 2002, Order Number: 290667-011
  * [2] Intel Corporation, "3 Volt Synchronous Intel Strata Flash Memory 28F640K3, 28F640K18,
  *     28F128K3, 28F128K18, 28F256K3, 28F256K18 (x16)", June 2002, Order Number: 290737-005
- *
+ * [3] Intel Corporation, "Intel Strata Flash Embedded Memory (P30)", April 2005,
+ *     Order Number: 306666-001
  */
 
 #ifndef FLASH_INTEL_H
@@ -97,6 +98,21 @@
 #define CFI_CHIPN_INTEL_28F128K18               "28F128K18"
 #define CFI_CHIP_INTEL_28F256K18                0x8807
 #define CFI_CHIPN_INTEL_28F256K18               "28F256K18"
+
+/* Intel flash device ID codes for 28FxxxP30 -  see Table 30. in [3] */
+
+#define CFI_CHIP_INTEL_28F640P30T               0x8817
+#define CFI_CHIPN_INTEL_28F640P30T              "28F640P30T"
+#define CFI_CHIP_INTEL_28F128P30T               0x8818
+#define CFI_CHIPN_INTEL_28F128P30T              "28F128P30T"
+#define CFI_CHIP_INTEL_28F256P30T               0x8819
+#define CFI_CHIPN_INTEL_28F256P30T              "28F256P30T"
+#define CFI_CHIP_INTEL_28F640P30B               0x881A
+#define CFI_CHIPN_INTEL_28F640P30B              "28F640P30B"
+#define CFI_CHIP_INTEL_28F128P30B               0x881B
+#define CFI_CHIPN_INTEL_28F128P30B              "28F128P30B"
+#define CFI_CHIP_INTEL_28F256P30B               0x881C
+#define CFI_CHIPN_INTEL_28F256P30B              "28F256P30B"
 
 extern const urj_flash_driver_t urj_flash_intel_32_flash_driver;
 extern const urj_flash_driver_t urj_flash_intel_16_flash_driver;
