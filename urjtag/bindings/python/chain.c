@@ -20,6 +20,7 @@
  *
  * Python bindings for urjtag intially written by Steve Tell.
  * Additional methods by Jonathan Stroud.
+ * More additional methods by Christopher McKnight.
  *
  */
 #include <Python.h>
@@ -456,11 +457,6 @@ urj_pyc_get_dr (urj_pychain_t *self, int in, int string, PyObject *args)
                          _("instruction without active data register"));
         return NULL;
     }
-
-    if (in)
-        r = dr->in;             /* input buffer for next shift_dr */
-    else
-        r = dr->out;            /* recently captured+scanned-out values */
 
     if (in)
         r = dr->in;             /* input buffer for next shift_dr */
@@ -911,6 +907,153 @@ urj_pyc_get_register (urj_pychain_t *self, PyObject *args)
 }
 
 
+static PyObject *
+urj_pyc_readmem (urj_pychain_t *self, PyObject *args)
+{
+    urj_chain_t *urc = self->urchain;
+    long unsigned adr = 0;
+    FILE *f;
+    char *fname = NULL;
+    int len = 0;
+
+    if (!PyArg_ParseTuple (args, "iis", &adr, &len, &fname))
+        return NULL;
+
+    if (!urj_pyc_precheck (urc, UPRC_CBL|UPRC_BUS))
+        return NULL;
+
+    f = fopen (fname, FOPEN_W);
+    if (!f)
+    {
+        PyErr_SetFromErrnoWithFilename(PyExc_IOError, fname);
+        return NULL;
+    }
+
+    fclose (f);
+    return urj_py_chkret (urj_bus_readmem (urj_bus, f, adr, len));
+}
+
+static PyObject *
+urj_pyc_unlockflash (urj_pychain_t *self, PyObject *args)
+{
+    urj_chain_t *urc = self->urchain;
+    long unsigned adr = 0;
+    int number;
+
+    if (!PyArg_ParseTuple (args, "ii", &adr, &number))
+        return NULL;
+
+    if (!urj_pyc_precheck (urc, UPRC_CBL|UPRC_BUS))
+        return NULL;
+
+    return urj_py_chkret (urj_flashlock (urj_bus, adr, number, 1));
+}
+
+static PyObject *
+urj_pyc_lockflash (urj_pychain_t *self, PyObject *args)
+{
+    urj_chain_t *urc = self->urchain;
+    long unsigned adr = 0;
+    int number;
+
+    if (!PyArg_ParseTuple (args, "ii", &adr, &number))
+        return NULL;
+
+    if (!urj_pyc_precheck (urc, UPRC_CBL|UPRC_BUS))
+        return NULL;
+
+    return urj_py_chkret (urj_flashlock (urj_bus, adr, number, 0));
+}
+
+static PyObject *
+urj_pyc_setsignal (urj_pychain_t *self, PyObject *args)
+{
+    urj_chain_t *urc = self->urchain;
+    urj_part_t *part;
+    urj_part_signal_t *sig;
+    int d = -1;
+    int dir;
+
+    char *dirstring;
+    char *sigstring;
+
+    if (!PyArg_ParseTuple (args, "ss|i", &sigstring, &dirstring, &d))
+        return NULL;
+
+    if (!urj_pyc_precheck (urc, UPRC_CBL|UPRC_DET))
+        return NULL;
+
+    part = urj_tap_chain_active_part (urc);
+    if (part == NULL)
+    {
+        PyErr_SetString (UrjtagError, _("no active part in chain"));
+        return NULL;
+    }
+
+    if (strcasecmp ("in", dirstring)!=0 && strcasecmp ("out", dirstring)!=0)
+    {
+        PyErr_SetString (UrjtagError, _("DIR must be 'in' or 'out'"));
+        return NULL;
+    }
+    dir = (strcasecmp (dirstring, "in") == 0) ? 0 : 1;
+
+    if (dir)
+    {
+        if (d<0 || d>1)
+        {
+            PyErr_SetString (UrjtagError, _("DATA must be '0' or '1'"));
+            return NULL;
+        }
+    }
+
+    sig = urj_part_find_signal (part, sigstring);
+    if (!sig)
+    {
+        PyErr_SetString (UrjtagError, _("signal not found"));
+        return NULL;
+    }
+
+    return urj_py_chkret (urj_part_set_signal (part, sig, dir, d));
+}
+
+static PyObject *
+urj_pyc_getsignal (urj_pychain_t *self, PyObject *args)
+{
+    urj_chain_t *urc = self->urchain;
+    urj_part_t *part;
+    urj_part_signal_t *sig;
+    int d = -1;
+    char *sigstring;
+
+    if (!PyArg_ParseTuple (args, "s", &sigstring))
+        return NULL;
+
+    if (!urj_pyc_precheck (urc, UPRC_CBL|UPRC_DET))
+        return NULL;
+
+    part = urj_tap_chain_active_part (urc);
+    if (part == NULL)
+    {
+        PyErr_SetString (UrjtagError, _("no active part in chain"));
+        return NULL;
+    }
+
+    sig = urj_part_find_signal (part, sigstring);
+    if (!sig)
+    {
+        PyErr_SetString (UrjtagError, _("signal not found"));
+        return NULL;
+    }
+    d = urj_part_get_signal (part, sig);
+    if (d == -1)
+    {
+        PyErr_SetString (UrjtagError, _("data read failed"));
+        return NULL;
+    }
+
+    return Py_BuildValue ("i", d);
+}
+
 static PyMethodDef urj_pyc_methods[] =
 {
     {"cable", (PyCFunction) urj_pyc_cable, METH_VARARGS,
@@ -983,6 +1126,16 @@ static PyMethodDef urj_pyc_methods[] =
      "burn flash memory with data from a file"},
     {"get_register", (PyCFunction)urj_pyc_get_register, METH_VARARGS,
      "retrieve register object for convenient set_dr/shift_dr use"},
+    {"readmem", (PyCFunction) urj_pyc_readmem, METH_VARARGS,
+     "read memory to file"},
+    {"unlockflash", (PyCFunction) urj_pyc_unlockflash, METH_VARARGS,
+     "unlock flash memory by number of blocks"},
+    {"lockflash", (PyCFunction) urj_pyc_lockflash, METH_VARARGS,
+     "lock flash memory by number of blocks"},
+    {"setsignal", (PyCFunction) urj_pyc_setsignal, METH_VARARGS,
+     "Set signal state in the input BSR"},
+    {"getsignal", (PyCFunction) urj_pyc_getsignal, METH_VARARGS,
+     "Get signal state from the output BSR"},
 
     {NULL}                      /* Sentinel */
 };
