@@ -66,6 +66,7 @@ _URJ_CABLE(ft2232_usbjtagrs232)
 _URJ_CABLE(ft2232_usbscarab2)
 _URJ_CABLE(ft2232_usbtojtagif)
 _URJ_CABLE(ft2232_digilenths1)
+_URJ_CABLE(ft2232_digilenths2)
 _URJ_CABLE(ft2232_ft4232)
 #endif
 #ifdef ENABLE_CABLE_GPIO

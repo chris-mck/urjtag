@@ -245,6 +245,20 @@
 #define BIT_DIGILENT_HS1_nOE         7
 #define BITMASK_DIGILENT_HS1_nOE     (1 << BIT_DIGILENT_HS1_nOE)
 
+/* bit and bitmask definitions for Digilent HS2 */
+/* TCK drives from bit 0 but is also connected to bit 4! */
+#define BIT_DIGILENT_HS2_TMSen     5
+#define BIT_DIGILENT_HS2_TDIen     6
+#define BIT_DIGILENT_HS2_TCKen     7
+#define BITMASK_DIGILENT_HS2_TMSen    (1 << BIT_DIGILENT_HS2_TMSen)
+#define BITMASK_DIGILENT_HS2_TDIen    (1 << BIT_DIGILENT_HS2_TDIen)
+#define BITMASK_DIGILENT_HS2_TCKen    (1 << BIT_DIGILENT_HS2_TCKen)
+/* the two-wire signals control mux chips that switch TDI and TDO onto TMS */
+#define BIT_DIGILENT_HS2_TDO_2WIRE  5 // aCbus
+#define BIT_DIGILENT_HS2_TDI_2WIRE  6 // aCbus
+#define BITMASK_DIGILENT_HS2_TDO_2WIRE (1 << BIT_DIGILENT_HS2_TDO_2WIRE)
+#define BITMASK_DIGILENT_HS2_TDI_2WIRE (1 << BIT_DIGILENT_HS2_TDI_2WIRE)
+
 /* bit and bitmask definitions for XDS100 from TI and
  * compatible JTAGv3,4,5 made by Tomas Kosan, University of West Bohemia
  */
@@ -1128,6 +1142,54 @@ ft2232_digilenths1_init (urj_cable_t *cable)
     urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
 
     ft2232_set_frequency (cable, FT2232_MAX_TCK_FREQ);
+
+    params->bit_trst = -1;      /* not used */
+    params->bit_reset = -1;     /* not used */
+
+    params->last_tdo_valid = 0;
+    params->signals = 0;
+
+    return URJ_STATUS_OK;
+}
+
+static int
+ft2232_digilenths2_init (urj_cable_t *cable)
+{
+    params_t *params = cable->params;
+    urj_tap_cable_cx_cmd_root_t *cmd_root = &params->cmd_root;
+
+    if (urj_tap_usbconn_open (cable->link.usb) != URJ_STATUS_OK)
+        return URJ_STATUS_FAIL;
+
+    /* static low byte value and direction:
+       TCKen = 1, TDIen = 1, TMSen = 1 -> activate outputs */
+    params->low_byte_value = BITMASK_DIGILENT_HS2_TCKen |
+        BITMASK_DIGILENT_HS2_TDIen | BITMASK_DIGILENT_HS2_TMSen;
+    params->low_byte_dir = BITMASK_DIGILENT_HS2_TCKen |
+        BITMASK_DIGILENT_HS2_TDIen | BITMASK_DIGILENT_HS2_TMSen;
+
+    /* Set Data Bits Low Byte
+       TCK = 0, TMS = 1, TDI = 0 */
+    urj_tap_cable_cx_cmd_queue (cmd_root, 0);
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_LOW);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->low_byte_value | BITMASK_TMS);
+    urj_tap_cable_cx_cmd_push (cmd_root,
+                               params->low_byte_dir | BITMASK_TCK
+                               | BITMASK_TDI | BITMASK_TMS);
+
+    /* Bits 5 and 6 of high byte control 2-wire JTAG bus (mux TDI/TDO to TMS) */
+    /* Won't bother to support that since the wire protocol is different and also rare */
+    /* Set Data Bits High Byte */
+    params->high_byte_value = 0;
+    params->high_byte_value = 0;
+    params->high_byte_dir = 0; /* HS2 board has pull-downs on the mux controls; safe */
+    urj_tap_cable_cx_cmd_push (cmd_root, SET_BITS_HIGH);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_value);
+    urj_tap_cable_cx_cmd_push (cmd_root, params->high_byte_dir);
+
+    /* HS2 uses chip FT232H, which is a single-channel version of FT2232H (30MHz max TCK) */
+    ft2232h_set_frequency (cable, FT2232H_MAX_TCK_FREQ);
 
     params->bit_trst = -1;      /* not used */
     params->bit_reset = -1;     /* not used */
@@ -2930,6 +2992,26 @@ const urj_cable_driver_t urj_tap_cable_ft2232_digilenths1_driver = {
     ftdx_usbcable_help
 };
 URJ_DECLARE_FTDX_CABLE(0x0403, 0x6010, "-mpsse", "DigilentHS1", digilenths1)
+
+const urj_cable_driver_t urj_tap_cable_ft2232_digilenths2_driver = {
+    "DigilentHS2",
+    N_("Digilent HS2 Adapter"),
+    URJ_CABLE_DEVICE_USB,
+    { .usb = ft2232_connect, },
+    urj_tap_cable_generic_disconnect,
+    ft2232_cable_free,
+    ft2232_digilenths2_init,
+    ft2232_generic_done,
+    ft2232h_set_frequency,
+    ft2232_clock,
+    ft2232_get_tdo,
+    ft2232_transfer,
+    ft2232_set_signal,
+    urj_tap_cable_generic_get_signal,
+    ft2232_flush,
+    ftdx_usbcable_help
+};
+URJ_DECLARE_FTDX_CABLE(0x0403, 0x6014, "-mpsse", "DigilentHS2", digilenths2)
 
 const urj_cable_driver_t urj_tap_cable_ft2232_ft4232_driver = {
     "FT4232",
