@@ -29,6 +29,8 @@
  *     August 14, 2001    Rev A, 25022.pdf
  * [3] Spansion, "S29GL-N MirrorBit Flash Family"
  *     October 13, 2006    Rev B, Amendment 3
+ * [4] Micron, "MT28EW128ABA",
+ *     November 2016        Rev E, PDF: 09005aef85c59413.
  *
  */
 
@@ -182,7 +184,7 @@ amdstatus (urj_flash_cfi_array_t *cfi_array, uint32_t adr, int data)
     uint32_t togglemask = ((1 << 6) << 16) + (1 << 6);  /* DQ 6 */
     /*  int dq5mask = ((1 << 5) << 16) + (1 << 5); DQ5 */
 
-    for (timeout = 0; timeout < 7000; timeout++)
+    for (timeout = 0; timeout < 11000; timeout++) /* block erase can take a full second, e.g. Micron MT28EW 128Mb. */
     {
         uint32_t data1 = URJ_BUS_READ (bus, adr);
         uint32_t data2 = URJ_BUS_READ (bus, adr);
@@ -307,7 +309,6 @@ amd_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array)
     mid = URJ_BUS_READ (bus, cfi_array->address + (0x00 << o)) & 0xFFFF;
     cid = URJ_BUS_READ (bus, cfi_array->address + (0x01 << o)) & 0xFFFF;
     prot = URJ_BUS_READ (bus, cfi_array->address + (0x02 << o)) & 0xFF;
-    amd_flash_read_array (cfi_array); /* AMD reset */
     urj_log (ll, _("Chip: AMD Flash\n\tManufacturer: "));
     switch (mid & 0xff)
     {
@@ -381,6 +382,47 @@ amd_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array)
             break;
         }
         break;
+    case 0x0089:
+        urj_log (ll, "Micron");
+        urj_log (ll, _("\n\tChip: "));
+        switch (cid)
+        {
+        case 0x007E: /* 8-bit */
+        case 0x227E: /* 16-bit */
+            /* [4] Table 9 also lists Device codes 2 and 3 at addresses 0x0E and 0x0F.
+             * 0x0E seems to identify chips within the MT28EW family, e.g. capacity.
+             * 0x0F is unknown; value 0x(22)01 for all 128Mb to 1Gb.
+             * MT28EW02Gxx appears to not exist?
+             */
+            int cid2 = URJ_BUS_READ (bus, cfi_array->address + (0x0E << o)) & 0xFFFF;
+            switch (cid2)
+            {
+            case 0x0021: /* 8-bit */
+            case 0x2221: /* 16-bit */
+                urj_log (ll, "MT28EW128ABA");
+                break;
+            case 0x0022: /* 8-bit */
+            case 0x2222: /* 16-bit */
+                urj_log (ll, "MT28EW256ABA");
+                break;
+            case 0x0023: /* 8-bit */
+            case 0x2223: /* 16-bit */
+                urj_log (ll, "MT28EW512ABA");
+                break;
+            case 0x0028: /* 8-bit */
+            case 0x2228: /* 16-bit */
+                urj_log (ll, "MT28EW01GABA");
+                break;
+            default:
+                urj_log (ll, _("Unknown MT28EW variant (ID 0x%04x)"), cid2);
+                break;
+            }
+            break;
+        default:
+            urj_log (ll, _("Unknown (ID 0x%04x)"), cid);
+            break;
+        }
+        break;
     case 0x00C2:
         urj_log (ll, "Macronix");
         urj_log (ll, _("\n\tChip: "));
@@ -422,9 +464,10 @@ amd_flash_print_info (urj_log_level_t ll, urj_flash_cfi_array_t *cfi_array)
         break;
     }
     urj_log (ll, _("\n\tProtected: %04x\n"), prot);
+    amd_flash_read_array (cfi_array); /* AMD reset */
 
     /* Read Array */
-    URJ_BUS_WRITE (bus, cfi_array->address + (0x0000 << o), 0x00ff00ff);
+    URJ_BUS_WRITE (bus, cfi_array->address + (0x0000 << o), 0x00ff00ff); /* FIXME: this looks invalid command! */
 }
 
 static int
